@@ -7,7 +7,7 @@ from article import ArticleParser
 
 #####DEF###################################################
 def makePrompt(language , artical):
-    prompt = f"""以下の手順で、記事の内容をポジティブにしてください。ニュースの内容を要約してはいけません。Let's think step by step.
+    prompt = f"""以下の手順で、記事の内容をポジティブにしてください。記事の内容を要約してはいけません。Let's think step by step.
     【手順1】
     例えば、以下の様にポジティブな表現に変えてください。この時に、引用された発言は書き換えてはいけません。また、文章は要約せずに忠実に変換してください。
     ・「積極性に欠ける」は「控えめな性格」
@@ -26,10 +26,13 @@ def makePrompt(language , artical):
     ・出力言語が日本語の場合、語尾は「なんだよ💓」や「だよ」や「だって～！」とか「らしいよ✨」とか「♡」にしてください。
     ・語尾が絵文字の時は「。」を削除してください。
     ・出力言語が日本語以外の場合は「♡」とか「★」とか「😊」とか「💕」や「🍀」を使ってください。
-    【手順7】
-    最後に注意点です。{language}に直して表示してください。
-    ## 記事
+    【注意点】
+    ・記事の内容を要約せずにポジティブにして表示してください
+    ・{language}に直して表示してください。
+記事は以下です。
     {artical}"""
+    
+    print(prompt)
     return prompt
 
 #####MAIN###################################################
@@ -50,7 +53,7 @@ language = st.selectbox(
 if st.button("ポジティブ化する💖"):
     parser = ArticleParser(url)
     article = parser.get_article_body()
-    prompt = makePrompt(language,article)
+    prompt = makePrompt(language,article["body"])
 
     # 　GPTへ渡す情報
     model_name = "gpt-4o-mini"
