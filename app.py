@@ -6,7 +6,7 @@ from openai import OpenAI
 from article import ArticleParser
 
 #####DEF###################################################
-def makePrompt(artical):
+def makePrompt(language , artical):
     prompt = f"""以下の手順で、記事の内容をポジティブにしてください。ニュースの内容を要約してはいけません。Let's think step by step.
     【手順1】
     例えば、以下の様にポジティブな表現に変えてください。この時に、引用された発言は書き換えてはいけません。また、文章は要約せずに忠実に変換してください。
@@ -28,9 +28,9 @@ def makePrompt(artical):
     ・出力言語が日本語以外の場合は「♡」とか「★」とか「😊」とか「💕」や「🍀」を使ってください。
     【手順7】
     最後に注意点です。{language}に直して表示してください。
-## 記事
-{artical}
-"""
+    ## 記事
+    {artical}"""
+    return prompt
 
 #####MAIN###################################################
 load_dotenv()
@@ -50,6 +50,7 @@ language = st.selectbox(
 if st.button("ポジティブ化する💖"):
     parser = ArticleParser(url)
     article = parser.get_article_body()
+    prompt = makePrompt(language,article)
 
     # 　GPTへ渡す情報
     model_name = "gpt-4o-mini"
